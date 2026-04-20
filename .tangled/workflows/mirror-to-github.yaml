@@ -1,21 +1,23 @@
 when:
-    - event: ["push", "manual"]
-      branch: ["main", "feat/*", "fix/*"]
+  - event: ["push", "manual"]
+    branch: ["main", "feat/*", "fix/*"]
 
 engine: "nixery"
 
 clone:
-    depth: 0
+  depth: 0
 
 dependencies:
-    nixpkgs:
-        - git
+  nixpkgs:
+    - git
 
 steps:
-    - name: "Mirror to GitHub"
-      command: |
-          git fetch --unshallow origin || true
-          git remote add github "https://x-access-token:${GITHUB_PAT}@github.com/daniel-daum/kaneo.git"
-          git push github "HEAD:refs/heads/${TANGLED_REF_NAME}" --force
-      environment:
-          GITHUB_PAT: "${{ secrets.GITHUB_PAT }}"
+  - name: "Mirror to GitHub"
+    command: |
+      git fetch --unshallow origin || true
+      git fetch origin refs/heads/${TANGLED_REF_NAME}:refs/heads/${TANGLED_REF_NAME}
+      git remote add github https://x-access-token:${GITHUB_PAT}@github.com/${GITHUB_USERNAME}/${GITHUB_REPO_NAME}.git
+      git push github refs/heads/${TANGLED_REF_NAME}:refs/heads/${TANGLED_REF_NAME} --force
+    environment:
+      GITHUB_USERNAME: "daniel-daum"
+      GITHUB_REPO_NAME: "kaneo"
