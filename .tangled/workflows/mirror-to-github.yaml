@@ -12,13 +12,10 @@ dependencies:
         - git
 
 steps:
-    - name: "Debug branch variable"
-      command: |
-          echo "Branch: ${SPINDLE_BRANCH}"
     - name: "Mirror to GitHub"
       command: |
           git fetch --unshallow origin || true
           git remote add github "https://x-access-token:${GITHUB_PAT}@github.com/daniel-daum/kaneo.git"
-          git push github "HEAD:refs/heads/${SPINDLE_BRANCH}" --force
+          git push github "HEAD:refs/heads/${TANGLED_REF_NAME}" --force
       environment:
           GITHUB_PAT: "${{ secrets.GITHUB_PAT }}"
